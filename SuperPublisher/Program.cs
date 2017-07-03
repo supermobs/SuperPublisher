@@ -142,7 +142,7 @@ namespace SuperMobs.ShellPublish
             Console.WriteLine("resver_android = " + resver_android);
 
             // 下载ipa
-            string[] ipa_verline = Encoding.UTF8.GetString(client.DownloadData(ConfigurationManager.AppSettings["apk_ver_download_url"].ToString())).Split('\n');
+            string[] ipa_verline = Encoding.UTF8.GetString(client.DownloadData(ConfigurationManager.AppSettings["ipa_ver_download_url"].ToString())).Split('\n');
             string[] ipa_ver_arr = ipa_verline[0].Split('.');
             string ipa_type = Join(ipa_ver_arr, ".", 4, ipa_ver_arr.Length - 4);
             string ipa_ver = Join(ipa_ver_arr, ".", 0, 4);
@@ -186,7 +186,7 @@ namespace SuperMobs.ShellPublish
             string apk_exver = apk_verline[1];
             string apk_name = apk_type + "." + apk_ver + (string.IsNullOrEmpty(apk_exver) ? "" : ("." + apk_exver));
             Console.WriteLine("apk_ver = " + apk_ver + ", apk_type = " + apk_type);
-            if (State.ins.GetVer("apk." + apk_type) != apk_ver || State.ins.GetExtVer("ipa." + apk_type) != apk_exver)
+            if (State.ins.GetVer("apk." + apk_type) != apk_ver || State.ins.GetExtVer("apk." + apk_type) != apk_exver)
             {
                 Console.WriteLine("start download apk");
                 client.DownloadFile(ConfigurationManager.AppSettings["apk_download_url"].ToString(), www_root + apk_name + ".apk");
