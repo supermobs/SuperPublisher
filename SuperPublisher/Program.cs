@@ -200,16 +200,18 @@ namespace SuperMobs.ShellPublish
 
             // 输出测试服 ios 更新配置文件
             string ipa_default_ver = State.ins.GetVer(ConfigurationManager.AppSettings["default_ios_package_type"].ToString());
+            string ipa_default_exver = State.ins.GetExtVer(ConfigurationManager.AppSettings["default_ios_package_type"].ToString());
             if (!string.IsNullOrEmpty(ipa_default_ver))
                 File.WriteAllText(www_root + "default.ios.html", File.ReadAllText(www_root + "default.ios.template")
                         .Replace("[VER]", ipa_default_ver.Substring(0, ipa_default_ver.LastIndexOf(".")) + "." + resver_ios)
-                        .Replace("[PACK_INSTALL_URL]", "itms-services://?action=download-manifest&amp;url=" + ConfigurationManager.AppSettings["qiniu_url_root"].ToString() + ConfigurationManager.AppSettings["default_ios_package_type"].ToString().Substring(4) + "." + ipa_default_ver + ".plist"));
+                        .Replace("[PACK_INSTALL_URL]", "itms-services://?action=download-manifest&amp;url=" + ConfigurationManager.AppSettings["qiniu_url_root"].ToString() + ConfigurationManager.AppSettings["default_ios_package_type"].ToString().Substring(4) + "." + ipa_default_ver + (string.IsNullOrEmpty(ipa_default_exver) ? "" : ("." + ipa_default_exver)) + ".plist"));
             // 输出测试服 android 更新配置文件
             string apk_default_ver = State.ins.GetVer(ConfigurationManager.AppSettings["default_android_package_type"].ToString());
+            string apk_default_exver = State.ins.GetExtVer(ConfigurationManager.AppSettings["default_android_package_type"].ToString());
             if (!string.IsNullOrEmpty(apk_default_ver))
                 File.WriteAllText(www_root + "default.android.html", File.ReadAllText(www_root + "default.android.template")
                         .Replace("[VER]", apk_default_ver.Substring(0, apk_default_ver.LastIndexOf(".")) + "." + resver_android)
-                        .Replace("[PACK_INSTALL_URL]", ConfigurationManager.AppSettings["url_root"].ToString() + ConfigurationManager.AppSettings["default_ios_package_type"].ToString().Substring(4) + "." + apk_default_ver + ".apk"));
+                        .Replace("[PACK_INSTALL_URL]", ConfigurationManager.AppSettings["url_root"].ToString() + ConfigurationManager.AppSettings["default_ios_package_type"].ToString().Substring(4) + "." + apk_default_ver + (string.IsNullOrEmpty(apk_default_exver) ? "" : ("." + apk_default_exver)) + ".apk"));
 
             // 输出网页文件
             string url_root = ConfigurationManager.AppSettings["url_root"].ToString();
