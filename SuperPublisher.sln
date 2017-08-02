@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "publish", "SuperPublisher\p
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qiniu.Net46", "csharp-sdk-7.2.4\src\Qiniu\Qiniu.Net46.csproj", "{FEB25665-1B1D-4646-A550-3994E7F8B073}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublishAssetsOnline", "PublishAssetsOnline\PublishAssetsOnline.csproj", "{1F65B10D-B1C2-48DA-ACA4-FABE354C4CB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{FEB25665-1B1D-4646-A550-3994E7F8B073}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEB25665-1B1D-4646-A550-3994E7F8B073}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEB25665-1B1D-4646-A550-3994E7F8B073}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F65B10D-B1C2-48DA-ACA4-FABE354C4CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F65B10D-B1C2-48DA-ACA4-FABE354C4CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F65B10D-B1C2-48DA-ACA4-FABE354C4CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F65B10D-B1C2-48DA-ACA4-FABE354C4CB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
