@@ -143,59 +143,65 @@ namespace SuperMobs.ShellPublish
 
             // 下载ipa
             string[] ipa_verline = Encoding.UTF8.GetString(client.DownloadData(ConfigurationManager.AppSettings["ipa_ver_download_url"].ToString())).Split('\n');
-            string[] ipa_ver_arr = ipa_verline[0].Split('.');
-            string ipa_type = Join(ipa_ver_arr, ".", 4, ipa_ver_arr.Length - 4);
-            string ipa_ver = Join(ipa_ver_arr, ".", 0, 4);
-            string ipa_exver = ipa_verline[1];
-            string ipa_name = ipa_type + "." + ipa_ver + (string.IsNullOrEmpty(ipa_exver) ? "" : ("." + ipa_exver));
-            Console.WriteLine("ipa_ver = " + ipa_ver + ", ipa_type = " + ipa_type);
-            if (State.ins.GetVer("ipa." + ipa_type) != ipa_ver || State.ins.GetExtVer("ipa." + ipa_type) != ipa_exver)
+            if (ipa_verline.Length > 1)
             {
-                Console.WriteLine("start download ipa");
-                client.DownloadFile(ConfigurationManager.AppSettings["ipa_download_url"].ToString(), www_root + ipa_name + ".ipa");
-                Console.WriteLine("ipa download complete! size = " + (new FileInfo(www_root + ipa_name + ".ipa").Length / 1024 / 1024f).ToString("0.0") + "M");
-                State.ins.SetVer("ipa." + ipa_type, ipa_ver, ipa_exver);
+                string[] ipa_ver_arr = ipa_verline[0].Split('.');
+                string ipa_type = Join(ipa_ver_arr, ".", 4, ipa_ver_arr.Length - 4);
+                string ipa_ver = Join(ipa_ver_arr, ".", 0, 4);
+                string ipa_exver = ipa_verline[1];
+                string ipa_name = ipa_type + "." + ipa_ver + (string.IsNullOrEmpty(ipa_exver) ? "" : ("." + ipa_exver));
+                Console.WriteLine("ipa_ver = " + ipa_ver + ", ipa_type = " + ipa_type);
+                if (State.ins.GetVer("ipa." + ipa_type) != ipa_ver || State.ins.GetExtVer("ipa." + ipa_type) != ipa_exver)
+                {
+                    Console.WriteLine("start download ipa");
+                    client.DownloadFile(ConfigurationManager.AppSettings["ipa_download_url"].ToString(), www_root + ipa_name + ".ipa");
+                    Console.WriteLine("ipa download complete! size = " + (new FileInfo(www_root + ipa_name + ".ipa").Length / 1024 / 1024f).ToString("0.0") + "M");
+                    State.ins.SetVer("ipa." + ipa_type, ipa_ver, ipa_exver);
 
-                // 上传ios安装说明
-                string plistContent = File.ReadAllText(www_root + "plist.template");
-                plistContent = plistContent.Replace("[IPA_DOWNLOAD_URL]", ConfigurationManager.AppSettings["url_root"].ToString() + ipa_name + ".ipa");
-                plistContent = plistContent.Replace("[IPA_BUNDLE_ID]", "com.supermobs.demo");
-                plistContent = plistContent.Replace("[IPA_BUNDLE_NAME]", ipa_name);
-                // 上传策略 http://developer.qiniu.com/article/developer/security/put-policy.html
-                PutPolicy putPolicy = new PutPolicy();
-                putPolicy.Scope = ConfigurationManager.AppSettings["qiniu_bucket"].ToString();
-                putPolicy.setExpires(3600);
-                putPolicy.DeleteAfterDays = 30;
-                // 生成上传凭证 http://developer.qiniu.com/article/developer/security/upload-token.html            
-                string token = UploadManager.createUploadToken(new Mac(ConfigurationManager.AppSettings["qiniu_accesskey"].ToString(), ConfigurationManager.AppSettings["qiniu_secretkey"].ToString()), putPolicy);
-                // 上传
-                SimpleUploader su = new SimpleUploader();
-                HttpResult result = su.uploadData(Encoding.UTF8.GetBytes(plistContent), ipa_name + ".plist", token);
-                Console.WriteLine("upload plist, result = " + result);
-            }
-            else
-            {
-                Console.WriteLine("ipa do not change, skip download");
+                    // 上传ios安装说明
+                    string plistContent = File.ReadAllText(www_root + "plist.template");
+                    plistContent = plistContent.Replace("[IPA_DOWNLOAD_URL]", ConfigurationManager.AppSettings["url_root"].ToString() + ipa_name + ".ipa");
+                    plistContent = plistContent.Replace("[IPA_BUNDLE_ID]", "com.supermobs.demo");
+                    plistContent = plistContent.Replace("[IPA_BUNDLE_NAME]", ipa_name);
+                    // 上传策略 http://developer.qiniu.com/article/developer/security/put-policy.html
+                    PutPolicy putPolicy = new PutPolicy();
+                    putPolicy.Scope = ConfigurationManager.AppSettings["qiniu_bucket"].ToString();
+                    putPolicy.setExpires(3600);
+                    putPolicy.DeleteAfterDays = 30;
+                    // 生成上传凭证 http://developer.qiniu.com/article/developer/security/upload-token.html            
+                    string token = UploadManager.createUploadToken(new Mac(ConfigurationManager.AppSettings["qiniu_accesskey"].ToString(), ConfigurationManager.AppSettings["qiniu_secretkey"].ToString()), putPolicy);
+                    // 上传
+                    SimpleUploader su = new SimpleUploader();
+                    HttpResult result = su.uploadData(Encoding.UTF8.GetBytes(plistContent), ipa_name + ".plist", token);
+                    Console.WriteLine("upload plist, result = " + result);
+                }
+                else
+                {
+                    Console.WriteLine("ipa do not change, skip download");
+                }
             }
 
             // 下载apk
             string[] apk_verline = Encoding.UTF8.GetString(client.DownloadData(ConfigurationManager.AppSettings["apk_ver_download_url"].ToString())).Split('\n');
-            string[] apk_ver_arr = apk_verline[0].Split('.');
-            string apk_type = Join(apk_ver_arr, ".", 4, apk_ver_arr.Length - 4);
-            string apk_ver = Join(apk_ver_arr, ".", 0, 4);
-            string apk_exver = apk_verline[1];
-            string apk_name = apk_type + "." + apk_ver + (string.IsNullOrEmpty(apk_exver) ? "" : ("." + apk_exver));
-            Console.WriteLine("apk_ver = " + apk_ver + ", apk_type = " + apk_type);
-            if (State.ins.GetVer("apk." + apk_type) != apk_ver || State.ins.GetExtVer("apk." + apk_type) != apk_exver)
+            if (ipa_verline.Length > 1)
             {
-                Console.WriteLine("start download apk");
-                client.DownloadFile(ConfigurationManager.AppSettings["apk_download_url"].ToString(), www_root + apk_name + ".apk");
-                Console.WriteLine("apk download complete! size = " + (new FileInfo(www_root + apk_name + ".apk").Length / 1024 / 1024f).ToString("0.0") + "M");
-                State.ins.SetVer("apk." + apk_type, apk_ver, apk_exver);
-            }
-            else
-            {
-                Console.WriteLine("apk do not change, skip download");
+                string[] apk_ver_arr = apk_verline[0].Split('.');
+                string apk_type = Join(apk_ver_arr, ".", 4, apk_ver_arr.Length - 4);
+                string apk_ver = Join(apk_ver_arr, ".", 0, 4);
+                string apk_exver = apk_verline[1];
+                string apk_name = apk_type + "." + apk_ver + (string.IsNullOrEmpty(apk_exver) ? "" : ("." + apk_exver));
+                Console.WriteLine("apk_ver = " + apk_ver + ", apk_type = " + apk_type);
+                if (State.ins.GetVer("apk." + apk_type) != apk_ver || State.ins.GetExtVer("apk." + apk_type) != apk_exver)
+                {
+                    Console.WriteLine("start download apk");
+                    client.DownloadFile(ConfigurationManager.AppSettings["apk_download_url"].ToString(), www_root + apk_name + ".apk");
+                    Console.WriteLine("apk download complete! size = " + (new FileInfo(www_root + apk_name + ".apk").Length / 1024 / 1024f).ToString("0.0") + "M");
+                    State.ins.SetVer("apk." + apk_type, apk_ver, apk_exver);
+                }
+                else
+                {
+                    Console.WriteLine("apk do not change, skip download");
+                }
             }
 
             // 输出测试服 ios 更新配置文件
