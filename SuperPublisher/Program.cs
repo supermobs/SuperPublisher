@@ -183,7 +183,7 @@ namespace SuperMobs.ShellPublish
 
             // 下载apk
             string[] apk_verline = Encoding.UTF8.GetString(client.DownloadData(ConfigurationManager.AppSettings["apk_ver_download_url"].ToString())).Split('\n');
-            if (ipa_verline.Length > 1)
+            if (apk_verline.Length > 1)
             {
                 string[] apk_ver_arr = apk_verline[0].Split('.');
                 string apk_type = Join(apk_ver_arr, ".", 4, apk_ver_arr.Length - 4);
