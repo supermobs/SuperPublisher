@@ -151,8 +151,17 @@ namespace SuperMobs.ShellPublish
                 string ipa_exver = ipa_verline[1];
                 string ipa_name = ipa_type + "." + ipa_ver + (string.IsNullOrEmpty(ipa_exver) ? "" : ("." + ipa_exver));
                 Console.WriteLine("ipa_ver = " + ipa_ver + ", ipa_type = " + ipa_type);
-                if (State.ins.GetVer("ipa." + ipa_type) != ipa_ver || State.ins.GetExtVer("ipa." + ipa_type) != ipa_exver)
+                string old_ipa_ver = State.ins.GetVer("ipa." + ipa_type);
+                string old_ipa_exver = State.ins.GetExtVer("ipa." + ipa_type);
+                if (old_ipa_ver != ipa_ver || old_ipa_exver != ipa_exver)
                 {
+                    string oldfile = www_root + ipa_type + "." + old_ipa_ver + (string.IsNullOrEmpty(old_ipa_exver) ? "" : ("." + old_ipa_exver)) + ".ipa";
+                    if (File.Exists(oldfile))
+                    {
+                        Console.WriteLine("del old ipa");
+                        File.Delete(oldfile);
+                    }
+
                     Console.WriteLine("start download ipa");
                     client.DownloadFile(ConfigurationManager.AppSettings["ipa_download_url"].ToString(), www_root + ipa_name + ".ipa");
                     Console.WriteLine("ipa download complete! size = " + (new FileInfo(www_root + ipa_name + ".ipa").Length / 1024 / 1024f).ToString("0.0") + "M");
@@ -191,8 +200,17 @@ namespace SuperMobs.ShellPublish
                 string apk_exver = apk_verline[1];
                 string apk_name = apk_type + "." + apk_ver + (string.IsNullOrEmpty(apk_exver) ? "" : ("." + apk_exver));
                 Console.WriteLine("apk_ver = " + apk_ver + ", apk_type = " + apk_type);
-                if (State.ins.GetVer("apk." + apk_type) != apk_ver || State.ins.GetExtVer("apk." + apk_type) != apk_exver)
+                string old_apk_ver = State.ins.GetVer("apk." + apk_type);
+                string old_apk_exver = State.ins.GetExtVer("apk." + apk_type);
+                if (old_apk_ver != apk_ver || old_apk_exver != apk_exver)
                 {
+                    string oldfile = www_root + apk_type + "." + old_apk_ver + (string.IsNullOrEmpty(old_apk_exver) ? "" : ("." + old_apk_exver)) + ".apk";
+                    if (File.Exists(oldfile))
+                    {
+                        Console.WriteLine("del old apk");
+                        File.Delete(oldfile);
+                    }
+
                     Console.WriteLine("start download apk");
                     client.DownloadFile(ConfigurationManager.AppSettings["apk_download_url"].ToString(), www_root + apk_name + ".apk");
                     Console.WriteLine("apk download complete! size = " + (new FileInfo(www_root + apk_name + ".apk").Length / 1024 / 1024f).ToString("0.0") + "M");
