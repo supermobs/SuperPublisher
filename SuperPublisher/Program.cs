@@ -169,7 +169,7 @@ namespace SuperMobs.ShellPublish
 
                     // 上传ios安装说明
                     string plistContent = File.ReadAllText(www_root + "plist.template");
-                    plistContent = plistContent.Replace("[IPA_DOWNLOAD_URL]", ConfigurationManager.AppSettings["url_root"].ToString() + ipa_name + ".ipa");
+                    plistContent = plistContent.Replace("[IPA_DOWNLOAD_URL]", ConfigurationManager.AppSettings["ipa_url_root"].ToString() + ipa_name + ".ipa");
                     plistContent = plistContent.Replace("[IPA_BUNDLE_ID]", "com.supermobs.demo");
                     plistContent = plistContent.Replace("[IPA_BUNDLE_NAME]", ipa_name);
                     // 上传策略 http://developer.qiniu.com/article/developer/security/put-policy.html
